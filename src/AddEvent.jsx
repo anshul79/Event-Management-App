@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
+import { connect } from 'react-redux';
 
 class AddEvent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: []
-    };
+      events: this.props.myevents
+    }
     this.onSubmitClick = this.onSubmitClick.bind(this);
   }
 
@@ -20,7 +21,7 @@ class AddEvent extends React.Component {
   }
 
   onSubmitClick(e) {
-    let events = this.state.events;
+    let events = this.props.myevents;
     let currentEvent = {};
     let isValidEvent = false;
 
@@ -33,7 +34,10 @@ class AddEvent extends React.Component {
     isValidEvent = this.validateFields(currentEvent);
     if (isValidEvent) {
       events.push(currentEvent);
-      this.setState({ events: events });
+      this.props.changeEvents(events);
+      this.setState({
+        events: this.props.myevents
+      })
     }
   }
 
@@ -43,9 +47,9 @@ class AddEvent extends React.Component {
   }
 
   render() {
-    const { events } = this.state;
+    const events = this.props.myevents;
     return (
-      <div className="serach-params">
+      <div className="add-event">
         <form>
           <label htmlFor="name">Enter event name:</label>
           <input id="event-name" placeholder="Event Name" name="Name" type="text" required=""></input><br /><br />
@@ -79,4 +83,18 @@ class AddEvent extends React.Component {
   }
 };
 
-export default AddEvent;
+const mapStateToProps = (state) => {
+  return {
+    myevents: state.events
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeEvents: (events) => {
+      dispatch({ type: 'CHANGE_EVENTS', payload: events });
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEvent);
