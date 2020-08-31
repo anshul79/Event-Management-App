@@ -61,7 +61,7 @@ class AddEvent extends React.Component {
       document.getElementById('price-error').style.display = 'block';
       isValidEvent = false;
     }
-    if (isNaN(event.discount)) {
+    if (isNaN(event.discount) || parseFloat(event.discount) > parseFloat(event.price)) {
       document.getElementById('dis-error').style.display = 'block';
       isValidEvent = false;
     }
