@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
+import DisplayEvents from "./DisplayEvents";
 
 class AddEvent extends React.Component {
   constructor(props) {
@@ -68,8 +69,39 @@ class AddEvent extends React.Component {
     return isValidEvent;
   }
 
+  displayEvents(type) {
+    let events = [];
+
+    this.props.myevents.map(event => {
+      if (type === 'free' && (event.price === '' || event.price === '0')) {
+        events.push(event);
+      }
+
+      if (type === 'discount' && (event.discount !== '' || parseFloat(event.discount) > 0)) {
+        events.push(event);
+      }
+
+      if (type === 'non-discount' && (event.discount === '' || event.discount === '0')) {
+        events.push(event);
+      }
+
+    });
+
+    this.setState({
+      events: events
+    });
+  }
+
+  displayAllEvents() {
+    this.setState({
+      events: this.props.myevents
+    });
+  }
+
   render() {
-    const events = this.props.myevents;
+
+
+    const events = this.state.events;
     return (
       <div className="add-event">
         <form>
@@ -92,7 +124,10 @@ class AddEvent extends React.Component {
         </form>
         <br />
         <br />
-        All Events:
+        <button onClick={() => this.displayAllEvents()}>All Events</button>
+        <button onClick={() => this.displayEvents('free')}>Free Events</button>
+        <button onClick={() => this.displayEvents('discount')}>Discounted Events</button>
+        <button onClick={() => this.displayEvents('non-discount')}>Non Discounted Events</button>
         <ul>
           {events.map(event => (
             <li key={event.name}>
