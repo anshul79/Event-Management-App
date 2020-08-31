@@ -43,6 +43,28 @@ class AddEvent extends React.Component {
 
   validateFields(event) {
     let isValidEvent = true;
+
+    document.getElementById('name-error').style.display = 'none';
+    document.getElementById('desc-error').style.display = 'none';
+    document.getElementById('price-error').style.display = 'none';
+    document.getElementById('dis-error').style.display = 'none';
+
+    if (event.name.length < 5 || event.name.length > 20) {
+      document.getElementById('name-error').style.display = 'block';
+      isValidEvent = false;
+    }
+    if (event.desc.length > 100) {
+      document.getElementById('desc-error').style.display = 'block';
+      isValidEvent = false;
+    }
+    if (isNaN(event.price)) {
+      document.getElementById('price-error').style.display = 'block';
+      isValidEvent = false;
+    }
+    if (isNaN(event.discount)) {
+      document.getElementById('dis-error').style.display = 'block';
+      isValidEvent = false;
+    }
     return isValidEvent;
   }
 
@@ -52,15 +74,19 @@ class AddEvent extends React.Component {
       <div className="add-event">
         <form>
           <label htmlFor="name">Enter event name:</label>
-          <input id="event-name" placeholder="Event Name" name="Name" type="text" required=""></input><br /><br />
+          <input id="event-name" placeholder="Event Name" name="Name" type="text" required=""></input>
+          <span id="name-error" className="error" style={{ display: "none" }}>Event name should be between 5 to 20 characters</span><br /><br />
           <label htmlFor="desc">Enter event description:</label>
-          <textarea id="event-desc" placeholder="Event Description" name="Description" type="text" required=""></textarea><br /><br />
+          <textarea id="event-desc" placeholder="Event Description" name="Description" type="text" required=""></textarea>
+          <span id="desc-error" className="error" style={{ display: "none" }}>Event desc should be less than 100 characters</span><br /><br />
           <label htmlFor="venue">Enter venue:</label>
           <input id="event-venue" placeholder="Venue" name="Venue" type="text" required=""></input><br /><br />
           <label htmlFor="price">Enter price:</label>
-          <input id="event-price" placeholder="Price in $" name="Price" type="text" required=""></input><br /><br />
+          <input id="event-price" placeholder="Price in $" name="Price" type="text" required=""></input>
+          <span id="price-error" className="error" style={{ display: "none" }}>Event price should be valid</span><br /><br />
           <label htmlFor="discount">Enter discount:</label>
-          <input id="event-dis" placeholder="Discount in $" name="Discount" type="text" required=""></input><br /><br />
+          <input id="event-dis" placeholder="Discount in $" name="Discount" type="text" required=""></input>
+          <span id="dis-error" className="error" style={{ display: "none" }}>Event discount should be valid</span><br /><br />
           <button id="event-clear" onClick={this.onClearClick}>Clear</button>
           <button id="event-submit" onClick={this.onSubmitClick}>Submit</button>
         </form>
